@@ -21,7 +21,7 @@ const CreatePostWizard = () => {
   const [input, setInput] = useState("");
 
   const ctx = api.useContext();
-  const { mutate, isLoading, isPosting } = api.posts.create.useMutation({
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
       setInput("");
       void ctx.posts.getAll.invalidate();
@@ -37,11 +37,11 @@ const CreatePostWizard = () => {
     }
   });
 
-  const handleOnEnter = (input) => {
-    if(input !== ""){
-      mutate({ content: input });
-    }
-  }
+  // const handleOnEnter = (input) => {
+  //   if(input !== ""){
+  //     mutate({ content: input });
+  //   }
+  // }
   if(!user) return null;
 
   return(
@@ -53,30 +53,30 @@ const CreatePostWizard = () => {
         width={14}
         height={14}
       />
-      {/* <input
+      <input
+        placeholder="Type some emojis!"
+        className="grow bg-transparent outline-none"
         type="text"
-        placeholder="Type some emojis"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        className="bg-transparent grow outline-none"
-        disabled={isPosting}
         onKeyDown={(e) => {
-          if(e.keyCode === "Enter"){
+          if (e.key === "Enter") {
             e.preventDefault();
-            if(input !== ""){
+            if (input !== "") {
               mutate({ content: input });
             }
           }
         }}
-      /> */}
-        <InputEmoji
+        disabled={isPosting}
+      />
+        {/* <InputEmoji
           value={input}
           onChange={setInput}
           cleanOnEnter
           onEnter={handleOnEnter}
           placeholder="Type some emojis"
           theme="auto"
-        />
+        /> */}
       {input !== "" && !isPosting && (<button
         type="submit"
         onClick={() => mutate({ content: input})}
@@ -102,7 +102,7 @@ const PostView = (props: PostWithUser) => {
     <div className="flex items-center gap-3 p-4 border-b border-slate-400" key={post.id}>
       <Image
         src={author.profileImageUrl}
-        alt={`${author.firstName} avatar`}
+        alt={`${author.username === null ? author.firstName : author.username} avatar`}
         className="w-14 h-14 rounded-full"
         width={14}
         height={14}
