@@ -7,6 +7,7 @@ import { prisma } from "~/server/db"
 import { appRouter } from '~/server/api/root';
 import superjson from 'superjson';
 import Layout from '~/components/Layout';
+import Image from 'next/image';
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 
@@ -22,7 +23,21 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
       <title>{data.username}</title>
     </Head>
     <Layout>
-      <div>{data.username}</div>
+      <div className='h-36 border-slate-400 bg-slate-600 relative'>
+        <Image
+          src={data.profileImageUrl}
+          alt={`${data.username === null ? data.firstName : data.username}'s profile pic`}
+          className="rounded-full absolute bottom-0 left-0 -mb-[64px] ml-4 border-4 border-black bg-black"
+          width={128}
+          height={128}
+        />
+      </div>
+      <div className='h-[70px]'></div>
+      <div className='p-4'>
+        <h1 className='text-2xl font-semibold'>{data.firstName}</h1>
+        <h3 className='text-slate-400'>{`@${data.username ?? ""}`}</h3>
+      </div>
+      <div className="border-b border-slate-400"></div>
     </Layout>
   </>
   )
