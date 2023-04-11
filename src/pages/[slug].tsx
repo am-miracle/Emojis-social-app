@@ -1,6 +1,6 @@
 import type { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
-// import Loading from '~/components/Loading'
+import Loading from '~/components/Loading'
 import { api } from '~/utils/api';
 import { createProxySSGHelpers } from '@trpc/react-query/ssg';
 import { prisma } from "~/server/db"
@@ -8,6 +8,24 @@ import { appRouter } from '~/server/api/root';
 import superjson from 'superjson';
 import Layout from '~/components/Layout';
 import Image from 'next/image';
+import PostView from '~/components/PostView';
+
+
+const ProfileFeed = (props: { userId: string}) => {
+  const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
+    userId: props.userId,
+  })
+
+  if(isLoading) return <Loading />;
+  if(!data || data.length === 0) return <p>User has not posted yet</p>
+
+  return (
+    <div className="flex flex-col">
+      {data.map(fullPost => (<PostView {...fullPost} key={fullPost.post.id} />))}
+    </div>
+  )
+}
+
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
 
@@ -37,7 +55,8 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         <h1 className='text-2xl font-semibold'>{data.firstName}</h1>
         <h3 className='text-slate-400'>{`@${data.username ?? ""}`}</h3>
       </div>
-      <div className="border-b border-slate-400"></div>
+      <div className="border-b border-slate-400" />
+      <ProfileFeed userId={data.id} />
     </Layout>
   </>
   )
