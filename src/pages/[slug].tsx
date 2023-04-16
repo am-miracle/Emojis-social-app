@@ -41,7 +41,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
       <div className='h-36 border-slate-400 bg-slate-600 relative'>
         <Image
           src={data.profileImageUrl}
-          alt={`${data.username === null ? data.firstName : data.username}'s profile pic`}
+          alt={`@${data.username ?? ""} profile pic`}
           className="rounded-full absolute bottom-0 left-0 -mb-[64px] ml-4 border-4 border-black bg-black"
           width={128}
           height={128}
@@ -68,12 +68,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const username = slug.replace("@", "")
 
-  await ssg.profile.getUserByUsername.prefetch({ username})
+  await ssg.profile.getUserByUsername.prefetch({ username })
 
   return{
     props: {
       trpcState: ssg.dehydrate(),
-      username
+      username,
     },
   }
 }
