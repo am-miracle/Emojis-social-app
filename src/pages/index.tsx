@@ -32,11 +32,11 @@ const CreatePostWizard = () => {
     }
   });
 
-  // const handleOnEnter = (input) => {
-  //   if(input !== ""){
-  //     mutate({ content: input });
-  //   }
-  // }
+  const handleOnEnter = (input: string) => {
+    if(input !== ""){
+      mutate({ content: input });
+    }
+  }
   if(!user) return null;
 
   return(
@@ -48,7 +48,7 @@ const CreatePostWizard = () => {
         width={14}
         height={14}
       />
-      <input
+      {/* <input
         placeholder="Type some emojis!"
         className="grow bg-transparent outline-none"
         type="text"
@@ -63,15 +63,15 @@ const CreatePostWizard = () => {
           }
         }}
         disabled={isPosting}
-      />
-        {/* <InputEmoji
+      /> */}
+        <InputEmoji
           value={input}
           onChange={setInput}
           cleanOnEnter
           onEnter={handleOnEnter}
           placeholder="Type some emojis"
           theme="auto"
-        /> */}
+        />
       {input !== "" && !isPosting && (<button
         type="submit"
         onClick={() => mutate({ content: input})}
